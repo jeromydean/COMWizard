@@ -1,0 +1,40 @@
+<Window
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="using:COMWizard.ViewModels"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  mc:Ignorable="d"
+  d:DesignWidth="800"
+  d:DesignHeight="450"
+  x:Class="COMWizard.Views.MainWindow"
+  x:DataType="vm:MainWindowViewModel"
+  Icon="/Assets/icon.ico"
+  Title="COMWizard"
+  UseLayoutRounding="True"
+  RenderOptions.BitmapInterpolationMode="HighQuality"
+  WindowState="Normal" WindowStartupLocation="CenterScreen"
+  Background="{x:Null}"
+  TransparencyLevelHint="AcrylicBlur"
+  ExtendClientAreaToDecorationsHint="True"
+  ExtendClientAreaChromeHints="PreferSystemChrome">
+  <Window.Resources>
+    <ExperimentalAcrylicMaterial
+      BackgroundSource="Digger"
+      TintColor="{DynamicResource SystemAltHighColor}"
+      TintOpacity="1"
+      FallbackColor="{DynamicResource AcrylicFallbackColor}"
+      MaterialOpacity="0.55"
+      x:Key="AcrylicMaterial"/>
+  </Window.Resources>
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+  <TextBlock
+    Text="{Binding Greeting}"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"/>
+</Window>
