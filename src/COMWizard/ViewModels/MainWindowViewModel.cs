@@ -1,7 +1,25 @@
-﻿namespace COMWizard.ViewModels
+﻿using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using COMWizard.Services;
+
+namespace COMWizard.ViewModels
 {
-  public partial class MainWindowViewModel : ViewModelBase
+  internal partial class MainWindowViewModel : ViewModelBase
   {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    private readonly IApplicationService _applicationService;
+
+    public ICommand ExitCommand { get; private set; }
+
+    public MainWindowViewModel(IApplicationService applicationService)
+    {
+      _applicationService = applicationService;
+
+      ExitCommand = new RelayCommand(CloseApplication);
+    }
+
+    private void CloseApplication()
+    {
+      _applicationService.DesktopStyleApplicationLifetime?.Shutdown();
+    }
   }
 }

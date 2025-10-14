@@ -1,10 +1,14 @@
+using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
+using COMWizard.Services;
 using COMWizard.ViewModels;
 using COMWizard.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace COMWizard
 {
@@ -22,13 +26,28 @@ namespace COMWizard
         // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
         // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
         DisableAvaloniaDataAnnotationValidation();
-        desktop.MainWindow = new MainWindow
+
+        MainWindow mainWindow = new MainWindow();
+
+        ServiceCollection serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<IStorageProvider>(mainWindow.StorageProvider);
+        serviceCollection.AddSingleton<IApplicationService>((sp) =>
         {
-          DataContext = new MainWindowViewModel(),
-        };
+          return new ApplicationService(ApplicationLifetime);
+        });
+        ConfigureServices(serviceCollection);
+        IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+
+        mainWindow.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
+        desktop.MainWindow = mainWindow;
       }
 
       base.OnFrameworkInitializationCompleted();
+    }
+
+    private void ConfigureServices(IServiceCollection services)
+    {
+      services.AddTransient<MainWindowViewModel>();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

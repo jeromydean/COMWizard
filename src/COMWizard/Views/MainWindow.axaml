@@ -32,9 +32,133 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainWindowViewModel/>
   </Design.DataContext>
+  <Grid
+    RowDefinitions="Auto, *">
+      <Menu Grid.Row="0">
+        <MenuItem Header="_File">
+          <Separator />
+          <MenuItem
+            Header="E_xit"
+            Command="{Binding ExitCommand}" />
+        </MenuItem>
+      </Menu>
+      <DockControl
+        x:Name="DockControl"
+        Grid.Row="1"
+        InitializeLayout="True"
+        InitializeFactory="True">
+        <DockControl.Factory>
+          <Factory
+            HideToolsOnClose="True"
+            HideDocumentsOnClose="True" />
+        </DockControl.Factory>
 
-  <TextBlock
-    Text="{Binding Greeting}"
-    HorizontalAlignment="Center"
-    VerticalAlignment="Center"/>
+        <RootDock
+          x:Name="Root"
+          Id="Root"
+          IsCollapsable="False"
+          DefaultDockable="{Binding #MainLayout}">
+
+          <ProportionalDock
+            x:Name="MainLayout"
+            Id="MainLayout"
+            Orientation="Horizontal">
+
+            <ToolDock
+              x:Name="LeftPane"
+              Id="LeftPane"
+              Proportion="0.25"
+              Alignment="Left">
+              <Tool
+                x:Name="Files"
+                Id="Files"
+                Title="Files"
+                x:DataType="Tool">
+                <TextBlock
+                  Text="{Binding Title}" />
+              </Tool>
+            </ToolDock>
+
+            <ProportionalDockSplitter
+              x:Name="LeftSplitter"
+              Id="LeftSplitter" />
+
+            <ProportionalDock
+              x:Name="TopPane"
+              Id="TopPane"
+              Orientation="Vertical">
+              
+              <ProportionalDock
+                x:Name="RightPane"
+                Id="RightPane"
+                Orientation="Horizontal">
+
+                <DocumentDock
+                  x:Name="KeysPane"
+                  Id="KeysPane"
+                  CanCreateDocument="False"
+                  CanClose="False">
+                  <Document
+                    x:Name="Keys"
+                    Id="Keys"
+                    Title="Keys"
+                    Context=""
+                    x:DataType="Document"
+                    CanClose="False"
+                    CanFloat="False">
+
+                  </Document>
+                </DocumentDock>
+
+                <ProportionalDockSplitter
+                  x:Name="RightSplitter"
+                  Id="RightSplitter" />
+
+                <ToolDock
+                    x:Name="ValuesPane"
+                    Id="ValuesPane"
+                    Proportion="0.3"
+                    Alignment="Right">
+                  <Tool
+                      x:Name="Values"
+                      Id="Values"
+                      Title="Values"
+                      x:DataType="Tool">
+                  </Tool>
+                </ToolDock>
+
+              </ProportionalDock>
+
+              <ProportionalDockSplitter
+                  x:Name="BottomSplitter"
+                  Id="BottomSplitter" />
+
+              <ToolDock
+                  x:Name="BottomPane"
+                  Id="BottomPane"
+                  Proportion="0.3"
+                  Alignment="Bottom"
+                  ActiveDockable="Output">
+                <Tool
+                  x:Name="ErrorList"
+                  Id="ErrorList"
+                  Title="Error List"
+                  x:DataType="Tool">
+                <TextBlock
+                  Text="{Binding Title}" />
+                </Tool>
+                <Tool
+                  x:Name="Output"
+                  Id="Output"
+                  Title="Output"
+                  x:DataType="Tool">
+                  <TextBlock
+                    Text="{Binding Title}" />
+                </Tool>
+              </ToolDock>
+            </ProportionalDock>
+          </ProportionalDock>
+        </RootDock>
+      </DockControl>
+  </Grid>
 </Window>
