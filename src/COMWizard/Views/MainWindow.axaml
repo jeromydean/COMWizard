@@ -9,6 +9,7 @@
   d:DesignHeight="450"
   x:Class="COMWizard.Views.MainWindow"
   x:DataType="vm:MainWindowViewModel"
+  x:Name="mainWindow"
   Icon="/Assets/icon.ico"
   Title="COMWizard"
   UseLayoutRounding="True"
@@ -82,8 +83,17 @@
               Id="Files"
               Title="Files"
               x:DataType="Tool">
-              <TextBlock
-                Text="{Binding Title}" />
+              <ListBox
+                Background="{x:Null}"
+                SelectionMode="Single">
+                <ListBox.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem
+                      Header="_Add"
+                      Command="{Binding DataContext.OpenFilesCommand, ElementName=mainWindow}" />
+                  </ContextMenu>
+                </ListBox.ContextMenu>
+              </ListBox>
             </Tool>
           </ToolDock>
 

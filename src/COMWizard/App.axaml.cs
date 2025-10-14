@@ -5,6 +5,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
+using COMWizard.Engine;
 using COMWizard.Services;
 using COMWizard.ViewModels;
 using COMWizard.Views;
@@ -47,7 +48,12 @@ namespace COMWizard
 
     private void ConfigureServices(IServiceCollection services)
     {
+      //Microsoft DI will auto choose the ctor with the most resolvable parameters so we don't need to specify not to use the designer ctor
       services.AddTransient<MainWindowViewModel>();
+
+      services.AddSingleton<IFilePickerService, FilePickerService>();
+      services.AddSingleton<IDialogService, DialogService>();
+      services.AddSingleton<IRegistrationEngine, RegistrationEngine>();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

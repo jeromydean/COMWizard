@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard", "COMWizard\COMWizard.csproj", "{3CD661DA-35D5-4D98-BABB-236C12617B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Engine", "COMWizard.Engine\COMWizard.Engine.csproj", "{951664C6-57E2-40D2-8214-DA5922E3FE00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Common", "COMWizard.Common\COMWizard.Common.csproj", "{074D6DEE-213F-4AC7-B7C4-C0AA9288048D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3CD661DA-35D5-4D98-BABB-236C12617B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CD661DA-35D5-4D98-BABB-236C12617B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CD661DA-35D5-4D98-BABB-236C12617B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{951664C6-57E2-40D2-8214-DA5922E3FE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{951664C6-57E2-40D2-8214-DA5922E3FE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{951664C6-57E2-40D2-8214-DA5922E3FE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{951664C6-57E2-40D2-8214-DA5922E3FE00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{074D6DEE-213F-4AC7-B7C4-C0AA9288048D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{074D6DEE-213F-4AC7-B7C4-C0AA9288048D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{074D6DEE-213F-4AC7-B7C4-C0AA9288048D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{074D6DEE-213F-4AC7-B7C4-C0AA9288048D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

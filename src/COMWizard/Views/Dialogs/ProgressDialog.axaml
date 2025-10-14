@@ -1,0 +1,57 @@
+<Window
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:COMWizard.ViewModels.Dialogs"
+  mc:Ignorable="d"
+  x:DataType="vm:ProgressDialogViewModel"
+  d:DesignWidth="450"
+  d:DesignHeight="150"
+  x:Class="COMWizard.ProgressDialog"
+  CanResize="False"
+  WindowStartupLocation="CenterOwner"
+  Title="{Binding Title}"
+  Width="450"
+  Height="150"
+  UseLayoutRounding="True"
+  RenderOptions.BitmapInterpolationMode="HighQuality"
+  Background="{x:Null}"
+  TransparencyLevelHint="AcrylicBlur"
+  ExtendClientAreaToDecorationsHint="True"
+  ExtendClientAreaChromeHints="NoChrome">
+  <Window.Resources>
+    <ExperimentalAcrylicMaterial
+      BackgroundSource="Digger"
+      TintColor="{DynamicResource SystemAltHighColor}"
+      TintOpacity="1"
+      FallbackColor="{DynamicResource AcrylicFallbackColor}"
+      MaterialOpacity="0.55"
+      x:Key="AcrylicMaterial"/>
+  </Window.Resources>
+  <Grid
+    Margin="10"
+    RowDefinitions="25,*,Auto">
+    <TextBlock
+      Grid.Row="0"
+      Text="{Binding Message}"
+      TextWrapping="Wrap" />
+    <ProgressBar
+      Grid.Row="1"
+      Width="400"
+      VerticalAlignment="Center"
+      IsIndeterminate="{Binding IsIndeterminate}"
+      Minimum="0"
+      Maximum="{Binding ProgressMaximum}"
+      Value="{Binding ProgressValue}"
+      Height="20" />
+    <Button
+      Grid.Row="2"
+      Width="100"
+      HorizontalAlignment="Right"
+      HorizontalContentAlignment="Center"
+      Content="Cancel"
+      Command="{Binding CancelCommand}"
+      IsEnabled="{Binding CanCancel}" />
+  </Grid>
+</Window>
