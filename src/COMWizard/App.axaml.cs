@@ -6,6 +6,7 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using COMWizard.Engine;
+using COMWizard.Engine.Extensions;
 using COMWizard.Services;
 using COMWizard.ViewModels;
 using COMWizard.Views;
@@ -53,7 +54,8 @@ namespace COMWizard
 
       services.AddSingleton<IFilePickerService, FilePickerService>();
       services.AddSingleton<IDialogService, DialogService>();
-      services.AddSingleton<IRegistrationEngine, RegistrationEngine>();
+
+      services.ConfigureEngineServices();
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

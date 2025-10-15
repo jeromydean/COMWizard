@@ -31,7 +31,7 @@ namespace COMWizard.ViewModels
       _applicationService = applicationService;
       _filePickerService = filePickerService;
       _dialogService = dialogService;
-      _registrationEngine = new RegistrationEngine();
+      _registrationEngine = registrationEngine;
 
       ExitCommand = new RelayCommand(CloseApplication);
       OpenFilesCommand = new AsyncRelayCommand(OpenFiles);

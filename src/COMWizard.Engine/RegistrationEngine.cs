@@ -1,17 +1,50 @@
 ﻿using System.IO.Pipes;
+using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
 using COMWizard.Common.Messaging.Enums;
 using COMWizard.Common.Messaging.Extensions;
+using COMWizard.Engine.Parsing;
 
 namespace COMWizard.Engine
 {
   public class RegistrationEngine : IRegistrationEngine
   {
+    private readonly IPEParsingService _peParsingService;
+
+    public RegistrationEngine(IPEParsingService peParsingService)
+    {
+      _peParsingService = peParsingService;
+    }
+
     public async IAsyncEnumerable<RegistrationResultMessage> Register(IEnumerable<string> paths,
       [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-      await foreach (RegistrationResultMessage registrationResultMessage in RegisterCore(paths, cancellationToken))
+      //figure out what kind of extractors we will need
+      List<PEMetadata> i386COMLibraries = new List<PEMetadata>();
+
+      foreach (PEMetadata peMetadata in paths.Select(p => _peParsingService.Parse(p)))
+      {
+        //we only support x86 unmanaged COM libraries at the moment
+        if (peMetadata.IsPortableExecutable
+          && peMetadata.Architecture == Machine.I386//&& (peMetadata.Architecture == Machine.I386 || peMetadata.Architecture == Machine.Amd64)
+          && peMetadata.IsCOM
+          && peMetadata.IsLibrary
+          && !peMetadata.IsAssembly)
+        {
+          i386COMLibraries.Add(peMetadata);
+        }
+        else
+        {
+          //TODO add some more information about why this file isn't supported
+          yield return new RegistrationResultMessage
+          {
+            Path = peMetadata.Path
+          };
+        }
+      }
+
+      await foreach (RegistrationResultMessage registrationResultMessage in RegisterCore(i386COMLibraries.Select(l => l.Path), cancellationToken))
       {
         yield return registrationResultMessage;
       }
