@@ -10,7 +10,4 @@
   <ItemGroup>
     <ProjectReference Include="..\COMWizard.Common\COMWizard.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parsing\" />
-  </ItemGroup>
 </Project>
