@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Common", "COMWiza
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Launcher", "COMWizard.Launcher\COMWizard.Launcher.csproj", "{5AF1BF4D-D822-4CF5-84F9-A1F08566A5D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.LibraryExtractor", "COMWizard.LibraryExtractor\COMWizard.LibraryExtractor.csproj", "{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5AF1BF4D-D822-4CF5-84F9-A1F08566A5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AF1BF4D-D822-4CF5-84F9-A1F08566A5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AF1BF4D-D822-4CF5-84F9-A1F08566A5D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

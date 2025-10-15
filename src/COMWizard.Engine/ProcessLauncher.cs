@@ -14,6 +14,11 @@ namespace COMWizard.Engine
     private Process _launcherProcess;
     private readonly SemaphoreSlim _disposeLock = new SemaphoreSlim(1, 1);
 
+    public NamedPipeServerStream ServerStream
+    {
+      get => _serverStream;
+    }
+
     public async Task ConnectAsync(CancellationToken cancellationToken = default)
     {
       _pipeName = $"comwizard.processlauncher-{Guid.NewGuid().ToString("N")}";

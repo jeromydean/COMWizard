@@ -1,5 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.IO.Pipes;
+using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
+using COMWizard.Common.Messaging.Enums;
+using COMWizard.Common.Messaging.Extensions;
 
 namespace COMWizard.Engine
 {
@@ -21,9 +24,33 @@ namespace COMWizard.Engine
       {
         await processLauncher.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-        //TODO iterate over the paths and have the launcher create the correct helper process to extract the registration entries
+        string extractorPipeName = $"comwizard.extractor-{Guid.NewGuid().ToString("N")}";
+        using (NamedPipeServerStream extractorPipeServerStream = new NamedPipeServerStream(extractorPipeName,
+          PipeDirection.InOut,
+          1,
+          PipeTransmissionMode.Byte,
+          PipeOptions.Asynchronous))
+        {
+          await processLauncher.ServerStream.WriteMessageAsync(new StartExtractorRequestMessage
+          {
+            Type = MessageType.StartExtractorRequest,
+            ExtractorType = ExtractorType.Library,
+            PipeName = extractorPipeName
+          }, cancellationToken).ConfigureAwait(false);
 
-        await Task.Delay(10000);
+          MessageBase extractorStartResponse = await processLauncher.ServerStream.ReadMessageAsync(cancellationToken);
+          if (extractorStartResponse is not StartExtractorResultMessage)
+          {
+            throw new InvalidDataException("Expected extractor startup response");
+          }
+
+          await extractorPipeServerStream.WaitForConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+          //now send the registration requests to the extractor with RegistrationRequestMessage
+          //TODO iterate over the paths and have the launcher create the correct helper process to extract the registration entries
+        }
+
+        await Task.Delay(10000, cancellationToken);
 
         yield break;
       }

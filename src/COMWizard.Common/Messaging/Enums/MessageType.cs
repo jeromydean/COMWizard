@@ -3,6 +3,8 @@
   public enum MessageType
   {
     Process,
+    StartExtractorRequest,
+    StartExtractorResult,
     Terminate
   }
 }

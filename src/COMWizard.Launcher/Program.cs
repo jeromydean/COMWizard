@@ -4,6 +4,7 @@ using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using COMWizard.Common.Messaging;
+using COMWizard.Common.Messaging.Enums;
 using COMWizard.Common.Messaging.Extensions;
 
 namespace COMWizard.Launcher
@@ -78,7 +79,38 @@ namespace COMWizard.Launcher
             MessageBase? message;
             while ((message = await pipeClientStream.ReadMessageAsync(cts.Token)) != null)
             {
-              if (message is TerminateMessage)
+              if (message is StartExtractorRequestMessage sem)
+              {
+                //Debugger.Launch();
+
+                //for now we only support sem.Type == Common.Messaging.Enums.ExtractorType.Library
+                ProcessStartInfo extractorStartInfo = new ProcessStartInfo
+                {
+                  FileName = @"C:\Users\user\source\repos\COMWizard\src\COMWizard.LibraryExtractor\bin\Debug\net8.0\COMWizard.LibraryExtractor.exe",
+                  ArgumentList = { "--pipe", sem.PipeName },
+                  UseShellExecute = false,
+                  CreateNoWindow = true
+                };
+
+                Process extractorProcess = Process.Start(extractorStartInfo);
+                if (extractorProcess == null
+                  || (extractorProcess.HasExited && extractorProcess.ExitCode != 0))
+                {
+                  await pipeClientStream.WriteMessageAsync(new StartExtractorResultMessage
+                  {
+                    Type = MessageType.StartExtractorResult
+                  }, cts.Token);
+                }
+                else
+                {
+                  await pipeClientStream.WriteMessageAsync(new StartExtractorResultMessage
+                  {
+                    Type = MessageType.StartExtractorResult,
+                    PID = extractorProcess.Id
+                  }, cts.Token);
+                }
+              }
+              else if (message is TerminateMessage)
               {
                 break;
               }
@@ -87,6 +119,8 @@ namespace COMWizard.Launcher
         }
       }
     }
+
+
 
     private static bool IsProcessElevated()
     {
