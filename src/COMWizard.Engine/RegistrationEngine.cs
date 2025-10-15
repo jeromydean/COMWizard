@@ -1,9 +1,6 @@
-﻿using System.IO.Pipes;
-using System.Reflection.PortableExecutable;
+﻿using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
-using COMWizard.Common.Messaging.Enums;
-using COMWizard.Common.Messaging.Extensions;
 using COMWizard.Engine.Parsing;
 
 namespace COMWizard.Engine
@@ -21,7 +18,7 @@ namespace COMWizard.Engine
       [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
       //figure out what kind of extractors we will need
-      List<PEMetadata> i386COMLibraries = new List<PEMetadata>();
+      List<PEMetadata> supportedFiles = new List<PEMetadata>();
 
       foreach (PEMetadata peMetadata in paths.Select(p => _peParsingService.Parse(p)))
       {
@@ -32,7 +29,7 @@ namespace COMWizard.Engine
           && peMetadata.IsLibrary
           && !peMetadata.IsAssembly)
         {
-          i386COMLibraries.Add(peMetadata);
+          supportedFiles.Add(peMetadata);
         }
         else
         {
@@ -44,48 +41,17 @@ namespace COMWizard.Engine
         }
       }
 
-      await foreach (RegistrationResultMessage registrationResultMessage in RegisterCore(i386COMLibraries.Select(l => l.Path), cancellationToken))
+      if (supportedFiles.Any())
       {
-        yield return registrationResultMessage;
-      }
-    }
-
-    private async IAsyncEnumerable<RegistrationResultMessage> RegisterCore(IEnumerable<string> paths,
-      [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-      await using (ProcessLauncher processLauncher = new ProcessLauncher())
-      {
-        await processLauncher.ConnectAsync(cancellationToken).ConfigureAwait(false);
-
-        string extractorPipeName = $"comwizard.extractor-{Guid.NewGuid().ToString("N")}";
-        using (NamedPipeServerStream extractorPipeServerStream = new NamedPipeServerStream(extractorPipeName,
-          PipeDirection.InOut,
-          1,
-          PipeTransmissionMode.Byte,
-          PipeOptions.Asynchronous))
+        await using (RegistrationManager registrationManager = new RegistrationManager())
         {
-          await processLauncher.ServerStream.WriteMessageAsync(new StartExtractorRequestMessage
-          {
-            Type = MessageType.StartExtractorRequest,
-            ExtractorType = ExtractorType.Library,
-            PipeName = extractorPipeName
-          }, cancellationToken).ConfigureAwait(false);
+          await registrationManager.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-          MessageBase extractorStartResponse = await processLauncher.ServerStream.ReadMessageAsync(cancellationToken);
-          if (extractorStartResponse is not StartExtractorResultMessage)
+          await foreach (RegistrationResultMessage registrationResultMessage in registrationManager.Register(supportedFiles, cancellationToken))
           {
-            throw new InvalidDataException("Expected extractor startup response");
+            yield return registrationResultMessage;
           }
-
-          await extractorPipeServerStream.WaitForConnectionAsync(cancellationToken).ConfigureAwait(false);
-
-          //now send the registration requests to the extractor with RegistrationRequestMessage
-          //TODO iterate over the paths and have the launcher create the correct helper process to extract the registration entries
         }
-
-        await Task.Delay(10000, cancellationToken);
-
-        yield break;
       }
     }
   }

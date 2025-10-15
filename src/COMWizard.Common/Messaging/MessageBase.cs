@@ -4,6 +4,6 @@ namespace COMWizard.Common.Messaging
 {
   public abstract class MessageBase
   {
-    public MessageType Type { get; set; }
+    public abstract MessageType Type { get; }
   }
 }

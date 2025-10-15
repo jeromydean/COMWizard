@@ -72,7 +72,6 @@ namespace COMWizard.Engine.Parsing
     public ushort? MajorRuntimeVersion { get; set; }
     public ushort? MinorRuntimeVersion { get; set; }
     public FrameworkName? Framework { get; set; }
-
     public bool? ILOnly { get; set; }
     public bool? Requires32Bit { get; set; }
     public bool? ILLibrary { get; set; }

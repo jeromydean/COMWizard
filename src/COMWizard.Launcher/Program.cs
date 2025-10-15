@@ -79,7 +79,7 @@ namespace COMWizard.Launcher
             MessageBase? message;
             while ((message = await pipeClientStream.ReadMessageAsync(cts.Token)) != null)
             {
-              if (message is StartExtractorRequestMessage sem)
+              if (message is StartRegistrarRequestMessage sem)
               {
                 //Debugger.Launch();
 
@@ -96,16 +96,12 @@ namespace COMWizard.Launcher
                 if (extractorProcess == null
                   || (extractorProcess.HasExited && extractorProcess.ExitCode != 0))
                 {
-                  await pipeClientStream.WriteMessageAsync(new StartExtractorResultMessage
-                  {
-                    Type = MessageType.StartExtractorResult
-                  }, cts.Token);
+                  await pipeClientStream.WriteMessageAsync(new StartRegistrarResultMessage(), cts.Token);
                 }
                 else
                 {
-                  await pipeClientStream.WriteMessageAsync(new StartExtractorResultMessage
+                  await pipeClientStream.WriteMessageAsync(new StartRegistrarResultMessage
                   {
-                    Type = MessageType.StartExtractorResult,
                     PID = extractorProcess.Id
                   }, cts.Token);
                 }

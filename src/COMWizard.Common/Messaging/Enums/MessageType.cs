@@ -2,9 +2,10 @@
 {
   public enum MessageType
   {
-    Process,
-    StartExtractorRequest,
-    StartExtractorResult,
+    StartRegistrarRequest,
+    StartRegistrarResult,
+    RegistrationRequest,
+    RegistrationResult,
     Terminate
   }
 }

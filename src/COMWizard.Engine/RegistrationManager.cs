@@ -1,11 +1,15 @@
 ﻿using System.Diagnostics;
 using System.IO.Pipes;
+using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
+using COMWizard.Common.Messaging.Enums;
 using COMWizard.Common.Messaging.Extensions;
+using COMWizard.Engine.Extensions;
+using COMWizard.Engine.Parsing;
 
 namespace COMWizard.Engine
 {
-  internal class ProcessLauncher : IAsyncDisposable, IDisposable
+  internal class RegistrationManager : IAsyncDisposable, IDisposable
   {
     private bool _disposed;
 
@@ -13,11 +17,12 @@ namespace COMWizard.Engine
     private NamedPipeServerStream _serverStream;
     private Process _launcherProcess;
     private readonly SemaphoreSlim _disposeLock = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _registrarCreationLock = new SemaphoreSlim(1, 1);
 
-    public NamedPipeServerStream ServerStream
-    {
-      get => _serverStream;
-    }
+    //public NamedPipeServerStream ServerStream
+    //{
+    //  get => _serverStream;
+    //}
 
     public async Task ConnectAsync(CancellationToken cancellationToken = default)
     {
@@ -55,6 +60,53 @@ namespace COMWizard.Engine
       {
         await CleanupResourcesAsync().ConfigureAwait(false);
         throw;
+      }
+    }
+
+    internal async Task<StartRegistrarResultMessage> CreateRegistrar(string pipeName,
+      string processName,
+      CancellationToken cancellationToken = default)
+    {
+      await _registrarCreationLock.WaitAsync().ConfigureAwait(false);
+      try
+      {
+        await _serverStream.WriteMessageAsync(new StartRegistrarRequestMessage
+        {
+          ExtractorType = ExtractorType.Library,
+          PipeName = pipeName
+        }, cancellationToken).ConfigureAwait(false);
+
+        MessageBase registrarStartResponse = await _serverStream.ReadMessageAsync(cancellationToken);
+        if (registrarStartResponse is not StartRegistrarResultMessage serm)
+        {
+          throw new InvalidDataException("Expected registrar startup response");
+        }
+
+        return serm;
+      }
+      finally
+      {
+        _registrarCreationLock.Release();
+      }
+    }
+
+    public async IAsyncEnumerable<RegistrationResultMessage> Register(IEnumerable<PEMetadata> files,
+      [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+      //TODO once we have multiple registrars implemented this will change based upon the input to go to proper registrar
+      int chunkSize = (int)Math.Ceiling(files.Count() / 2d);
+
+//#if (DEBUG)
+//      chunkSize = files.Count();
+//#endif
+
+      IEnumerable<IEnumerable<PEMetadata>> chunks = files.Chunk(chunkSize);
+
+      IEnumerable<IRegistrar> registrars = chunks.Select(c => new X86LibraryRegistrar(this, c));
+
+      await foreach (RegistrationResultMessage registrationResult in registrars.Select(r => r.Register(cancellationToken)).Interleave(cancellationToken))
+      {
+        yield return registrationResult;
       }
     }
 
@@ -206,7 +258,7 @@ namespace COMWizard.Engine
       GC.SuppressFinalize(this);
     }
 
-    ~ProcessLauncher()
+    ~RegistrationManager()
     {
       Dispose();
     }

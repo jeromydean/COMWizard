@@ -1,7 +1,10 @@
-﻿namespace COMWizard.Common.Messaging
+﻿using COMWizard.Common.Messaging.Enums;
+
+namespace COMWizard.Common.Messaging
 {
   public class RegistrationResultMessage : MessageBase
   {
+    public override MessageType Type => MessageType.RegistrationResult;
     public string Path { get; set; }
   }
 }
