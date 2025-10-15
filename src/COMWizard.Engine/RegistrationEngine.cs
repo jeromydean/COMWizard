@@ -1,7 +1,7 @@
 ﻿using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
-using COMWizard.Engine.Parsing;
+using COMWizard.Common.PortableExecutable;
 
 namespace COMWizard.Engine
 {
@@ -34,9 +34,11 @@ namespace COMWizard.Engine
         else
         {
           //TODO add some more information about why this file isn't supported
-          yield return new RegistrationResultMessage
+          yield return new RegistrationFailureResultMessage
           {
-            Path = peMetadata.Path
+            Name = Path.GetFileName(peMetadata.Path),
+            Path = peMetadata.Path,
+            Exception = $"Attempt to register an unsupported file '{peMetadata.Path}'."
           };
         }
       }

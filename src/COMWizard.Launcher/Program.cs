@@ -4,7 +4,6 @@ using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using COMWizard.Common.Messaging;
-using COMWizard.Common.Messaging.Enums;
 using COMWizard.Common.Messaging.Extensions;
 
 namespace COMWizard.Launcher
@@ -86,7 +85,7 @@ namespace COMWizard.Launcher
                 //for now we only support sem.Type == Common.Messaging.Enums.ExtractorType.Library
                 ProcessStartInfo extractorStartInfo = new ProcessStartInfo
                 {
-                  FileName = @"C:\Users\user\source\repos\COMWizard\src\COMWizard.LibraryExtractor\bin\Debug\net8.0\COMWizard.LibraryExtractor.exe",
+                  FileName = @"C:\Users\user\source\repos\COMWizard\src\COMWizard.LibraryRegistrar\bin\Debug\net8.0\COMWizard.LibraryRegistrar.exe",
                   ArgumentList = { "--pipe", sem.PipeName },
                   UseShellExecute = false,
                   CreateNoWindow = true

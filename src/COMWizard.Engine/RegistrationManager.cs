@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 using COMWizard.Common.Messaging;
 using COMWizard.Common.Messaging.Enums;
 using COMWizard.Common.Messaging.Extensions;
+using COMWizard.Common.PortableExecutable;
 using COMWizard.Engine.Extensions;
-using COMWizard.Engine.Parsing;
 
 namespace COMWizard.Engine
 {

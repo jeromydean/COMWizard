@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Common", "COMWiza
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.Launcher", "COMWizard.Launcher\COMWizard.Launcher.csproj", "{5AF1BF4D-D822-4CF5-84F9-A1F08566A5D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.LibraryExtractor", "COMWizard.LibraryExtractor\COMWizard.LibraryExtractor.csproj", "{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMWizard.LibraryRegistrar", "COMWizard.LibraryRegistrar\COMWizard.LibraryRegistrar.csproj", "{ABCD44CA-F8FC-4E97-B71F-2F0B9E86F96B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

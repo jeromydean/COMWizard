@@ -1,4 +1,4 @@
-﻿using COMWizard.Engine.Parsing;
+﻿using COMWizard.Common.PortableExecutable;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace COMWizard.Engine.Extensions

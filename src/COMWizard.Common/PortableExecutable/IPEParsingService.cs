@@ -1,4 +1,4 @@
-﻿namespace COMWizard.Engine.Parsing
+﻿namespace COMWizard.Common.PortableExecutable
 {
   public interface IPEParsingService
   {

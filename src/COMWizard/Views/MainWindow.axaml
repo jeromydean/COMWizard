@@ -85,7 +85,8 @@
               x:DataType="Tool">
               <ListBox
                 Background="{x:Null}"
-                SelectionMode="Single">
+                SelectionMode="Single"
+                ItemsSource="{Binding DataContext.Items, ElementName=mainWindow}">
                 <ListBox.ContextMenu>
                   <ContextMenu>
                     <MenuItem
@@ -93,6 +94,13 @@
                       Command="{Binding DataContext.OpenFilesCommand, ElementName=mainWindow}" />
                   </ContextMenu>
                 </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <CheckBox
+                      IsChecked="{Binding IsChecked}"
+                      Content="{Binding Content}" />
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
               </ListBox>
             </Tool>
           </ToolDock>

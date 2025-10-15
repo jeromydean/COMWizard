@@ -1,7 +1,7 @@
 ﻿using System.IO.Pipes;
 using COMWizard.Common.Messaging;
 using COMWizard.Common.Messaging.Extensions;
-using COMWizard.Engine.Parsing;
+using COMWizard.Common.PortableExecutable;
 
 namespace COMWizard.Engine
 {
@@ -27,7 +27,7 @@ namespace COMWizard.Engine
         PipeOptions.Asynchronous))
       {
         StartRegistrarResultMessage result = await _registrationManager.CreateRegistrar(pipeName,
-          @"C:\Users\user\source\repos\COMWizard\src\COMWizard.LibraryExtractor\bin\Debug\net8.0\COMWizard.LibraryExtractor.exe",
+          @"C:\Users\user\source\repos\COMWizard\src\COMWizard.LibraryRegistrar\bin\Debug\net8.0\COMWizard.LibraryRegistrar.exe",
           cancellationToken);
 
         await registrarPipeServerStream.WaitForConnectionAsync(cancellationToken).ConfigureAwait(false);
@@ -36,6 +36,7 @@ namespace COMWizard.Engine
         {
           await registrarPipeServerStream.WriteMessageAsync(new RegistrationRequestMessage
           {
+            FileInformation = work,
             Path = work.Path,
             SHA256 = work.SHA256
           }, cancellationToken).ConfigureAwait(false);

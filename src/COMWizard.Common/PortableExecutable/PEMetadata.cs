@@ -1,7 +1,8 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Versioning;
 
-namespace COMWizard.Engine.Parsing
+namespace COMWizard.Common.PortableExecutable
 {
   public class PEMetadata
   {

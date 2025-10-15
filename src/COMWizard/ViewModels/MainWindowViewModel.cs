@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using COMWizard.Common.Messaging;
+using COMWizard.Common.PortableExecutable;
 using COMWizard.Engine;
 using COMWizard.Services;
 
@@ -19,6 +21,8 @@ namespace COMWizard.ViewModels
 
     public ICommand ExitCommand { get; private set; }
     public ICommand OpenFilesCommand { get; private set; }
+
+    public ObservableCollection<CheckedListBoxItem<PEMetadata>> Items { get; } = new ObservableCollection<CheckedListBoxItem<PEMetadata>>();
 
     //designer ctor
     public MainWindowViewModel() { }
@@ -63,6 +67,16 @@ namespace COMWizard.ViewModels
             {
               registered++;
               progressDialogHandle.Progress.Report(registered);
+
+              if (registrationResult is RegistrationSuccessResultMessage successfulRegistration)
+              {
+                Items.Add(new CheckedListBoxItem<PEMetadata>
+                {
+                  Value = successfulRegistration.FileInformation,
+                  IsChecked = true,
+                  Content = successfulRegistration.Name
+                });
+              }
             }
           }
           finally

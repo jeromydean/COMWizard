@@ -1,10 +1,14 @@
-﻿using System.Reflection.Metadata;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace COMWizard.Engine.Parsing
+namespace COMWizard.Common.PortableExecutable
 {
   public class PEParsingService : IPEParsingService
   {
@@ -19,7 +23,7 @@ namespace COMWizard.Engine.Parsing
       {
         using (SHA256 sha256 = SHA256.Create())
         {
-          metadata.SHA256 = Convert.ToHexString(sha256.ComputeHash(fileStream));
+          metadata.SHA256 = BitConverter.ToString(sha256.ComputeHash(fileStream)).Replace("-", "");//Convert.ToHexString(sha256.ComputeHash(fileStream));
           fileStream.Position = 0;
         }
 
