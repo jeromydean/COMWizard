@@ -17,24 +17,15 @@ namespace COMWizard.Engine
     private async IAsyncEnumerable<RegistrationResultMessage> RegisterCore(IEnumerable<string> paths,
       [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-      Random random = new Random(Guid.NewGuid().GetHashCode());
-      foreach (string path in paths)
+      await using (ProcessLauncher processLauncher = new ProcessLauncher())
       {
-        RegistrationResultMessage? registrationResult = null;
-        try
-        {
-          await Task.Delay(random.Next(1000, 1750), cancellationToken);
-          registrationResult = new RegistrationResultMessage();
-        }
-        catch (TaskCanceledException)
-        {
-          yield break;
-        }
+        await processLauncher.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-        if (registrationResult != null)
-        {
-          yield return registrationResult;
-        }
+        //TODO iterate over the paths and have the launcher create the correct helper process to extract the registration entries
+
+        await Task.Delay(10000);
+
+        yield break;
       }
     }
   }
